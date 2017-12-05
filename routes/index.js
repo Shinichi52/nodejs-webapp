@@ -1,4 +1,5 @@
 var moviesJSON = require('../movies.json')
+var storage = require('../storage');
 var default_tab_title = "Star Wars Movies"
 
 // *************************************************************************************************
@@ -13,45 +14,66 @@ var default_tab_title = "Star Wars Movies"
 
 
 // Home page
-exports.home = function(req, res) {
+exports.home = function (req, res) {
 	var movies = moviesJSON.movies;
 
-	res.render('home',{
-		title  : default_tab_title,
-		movies : movies
+	res.render('home', {
+		title: default_tab_title,
+		movies: movies
 	})
 };
+exports.insertData = function (req, res) {
+	// Track every IP that has visited this site
+	const collection = storage.mongo.collection('IPs');
 
+	const ip = {
+		address: 'req.connection.remoteAddress'
+	};
+
+	collection.insert(ip, (err) => {
+		if (err) {
+			throw err;
+		}
+		console.log('Data inserted');
+	});
+
+}
+exports.getData = function (req, res) {
+	const collection = storage.mongo.collection('IPs');
+	collection.find({}).toArray(function (err, data) {
+		// data
+	});
+}
 // Movie single
-exports.movie_single = function(req, res){
+exports.movie_single = function (req, res) {
 	var episode_number = req.params.episode_number;
 	var movies = moviesJSON.movies;
-	
+
 	if (episode_number >= 1 && episode_number <= 6) {
 		var movie = movies[episode_number - 1];
 		var title = movie.title;
 		var main_characters = movie.main_characters;
 
 		res.render('movie_single', {
-			title  : title,
-			movies : movies,
-			movie : movie,
-			main_characters : main_characters
+			title: title,
+			movies: movies,
+			movie: movie,
+			main_characters: main_characters
 		})
 	} else {
-		res.render('notfound',{
-			title  : default_tab_title,
-			movies : movies
+		res.render('notfound', {
+			title: default_tab_title,
+			movies: movies
 		});
 	}
 
 };
 
 // Not Found
-exports.notfound = function(req, res) {
+exports.notfound = function (req, res) {
 	var movies = moviesJSON.movies;
-	res.render('notfound',{
-			title  : default_tab_title,
-			movies : movies
-		});
+	res.render('notfound', {
+		title: default_tab_title,
+		movies: movies
+	});
 };
