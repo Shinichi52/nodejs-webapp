@@ -1,7 +1,7 @@
 {
-    "mongoHost": "YOUR_MONGO_HOST",
-    "mongoPort": "YOUR_MONGO_PORT",
-    "mongoDatabase": "YOUR_MONGO_DB",
-    "mongoUser": "YOUR_MONGO_USERNAME",
-    "mongoPass": "YOUR_MONGO_PASSWORD"
+    "mongoHost": "127.0.0.1",
+    "mongoPort": "27017",
+    "mongoDatabase": "bookstore",
+    "mongoUser": "windydang",
+    "mongoPass": "01020693"
 }
