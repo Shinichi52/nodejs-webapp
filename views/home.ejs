@@ -1,36 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    
-    <% include partials/head.ejs %>
 
-  </head>
-  <body>
-    
-  	<% include partials/header.ejs %>
+<head>
 
-  	<div id="hero-image">
-  		<h1 id="hero-title"><%= title %></h1>
-  	</div>
+	<% include partials/head.ejs %>
 
-  	<div id="posters-wrapper" class="content-padding clearfix">
-	    <% for (var i=0; i < movies.length; i++) { %>
-	    	<div class="poster">
-	    		
-          <a href="/star_wars_episode/<%= movies[i].episode_number %>">
-            <img src="/images/<%= movies[i].poster %>" class="img-responsive">
+</head>
 
-  	    		<div class="poster-info-overlay">
-  	    			<h3><%= movies[i].title %></h3>
-  	    			<h4>View more <i class="fa fa-arrow-right"></i></h4>
-  	    		</div>
-          </a>
-	    </div>
-	  	<% } %>  		
-  	</div>
+<body>
 
-    <% include partials/footer.ejs %>
+	<% include partials/header.ejs %>
 
-    <% include partials/scripts.ejs %>
-  </body>
+		<div id="hero-image">
+			<h1 id="hero-title">
+				<%= title %>
+			</h1>
+		</div>
+
+		<div id="posters-wrapper" class="content-padding clearfix">
+			<% for (var i=0; i < books.length; i++) { %>
+				<div class="poster">
+
+					<a href="/book_id/<%= books[i].id %>">
+						<img src="/images/<%= books[i].poster %>" class="img-responsive cover-image">
+
+						<div class="poster-info-overlay">
+							<h3>
+								<%= books[i].name %>
+							</h3>
+							<h4>View more
+								<i class="fa fa-arrow-right"></i>
+							</h4>
+						</div>
+					</a>
+				</div>
+				<% } %>
+		</div>
+
+		<% include partials/footer.ejs %>
+
+			<% include partials/scripts.ejs %>
+</body>
+
 </html>

@@ -21,7 +21,7 @@ Hero Image / Title Styles
 	height: 550px;
 	width: 100%;
 	background-color: #444;
-	background-image: url('../images/death_star_image.jpg');
+	background-image: url('../images/book_store.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -114,7 +114,7 @@ Home Page Posters Styles
 }
 .poster {
 	width: 30%;
-	margin-right: 4%;
+	margin-right: 3%;
 	display: inline-block;
 	position: relative;
 }
@@ -275,6 +275,10 @@ Movie-Single Hero Image and Title Styles
 /* ---------------------------------------
 Movie-Single Poster and Description Styles 
 ------------------------------------------ */
+.cover-image {
+	height: 446px !important;
+}
+
 .poster-wrapper {
 	float: left;
 	width: 30%;
@@ -352,7 +356,7 @@ Media Queries / Responsive Styles
 		margin-right: 0px;
 	}
 
-	.poster:nth-child(-n + 3) {
+	.poster:nth-child(-n + 6) {
 		margin-bottom: 30px;
 	}
 }

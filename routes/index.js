@@ -1,6 +1,6 @@
 var moviesJSON = require('../movies.json')
 var storage = require('../storage');
-var default_tab_title = "Star Wars Movies"
+var default_tab_title = "Books store"
 
 // *************************************************************************************************
 // Required parameters to call viewers that use head.ejs, header.ejs
@@ -16,11 +16,22 @@ var default_tab_title = "Star Wars Movies"
 // Home page
 exports.home = function (req, res) {
 	var movies = moviesJSON.movies;
-
-	res.render('home', {
-		title: default_tab_title,
-		movies: movies
-	})
+	var books = [];
+	var collection = storage.mongo.collection('books');
+	// Find some documents
+	collection.find({}).toArray(function (err, data) {
+		if (err) {
+			console.log("Cannot get data");
+		} else {
+			console.log("Found the following records");
+			books = data;
+			res.render('home', {
+				title: default_tab_title,
+				movies: movies,
+				books: books
+			})
+		}
+	});
 };
 exports.insertData = function (req, res) {
 	// Track every IP that has visited this site
@@ -45,35 +56,56 @@ exports.getData = function (req, res) {
 	});
 }
 // Movie single
-exports.movie_single = function (req, res) {
-	var episode_number = req.params.episode_number;
+exports.book_single = function (req, res) {
+	var id = req.params.id;
 	var movies = moviesJSON.movies;
+	var books = [];
+	var collection = storage.mongo.collection('books');
+	// Find some documents
+	collection.find({}).toArray(function (err, data) {
+		if (err) {
+			console.log("Cannot get data");
+		} else {
+			console.log("Found the following records");
+			books = data;
+			if (id >= 1 && id <= 9) {
+				var book = books[id - 1];
+				var name = book.name;
+				var author = book.author;
 
-	if (episode_number >= 1 && episode_number <= 6) {
-		var movie = movies[episode_number - 1];
-		var title = movie.title;
-		var main_characters = movie.main_characters;
-
-		res.render('movie_single', {
-			title: title,
-			movies: movies,
-			movie: movie,
-			main_characters: main_characters
-		})
-	} else {
-		res.render('notfound', {
-			title: default_tab_title,
-			movies: movies
-		});
-	}
+				res.render('book_single', {
+					title: name,
+					books: books,
+					book: book,
+					author: author
+				})
+			} else {
+				res.render('notfound', {
+					title: default_tab_title,
+					books: books
+				});
+			}
+		}
+	});
 
 };
 
 // Not Found
 exports.notfound = function (req, res) {
 	var movies = moviesJSON.movies;
-	res.render('notfound', {
-		title: default_tab_title,
-		movies: movies
+	var books = [];
+	var collection = storage.mongo.collection('books');
+	// Find some documents
+	collection.find({}).toArray(function (err, data) {
+		if (err) {
+			console.log("Cannot get data");
+		} else {
+			console.log("Found the following records");
+			books = data;
+			res.render('notfound', {
+				title: default_tab_title,
+				books: books
+			});
+		}
 	});
 };
