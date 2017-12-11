@@ -15,6 +15,7 @@ var default_tab_title = "Books store"
 
 // Home page
 exports.home = function (req, res) {
+	var user = req.user;
 	var movies = moviesJSON.movies;
 	var books = [];
 	var collection = storage.mongo.collection('books');
@@ -28,33 +29,23 @@ exports.home = function (req, res) {
 			res.render('home', {
 				title: default_tab_title,
 				movies: movies,
-				books: books
+				books: books,
+				user: user
 			})
 		}
 	});
 };
-exports.insertData = function (req, res) {
-	// Track every IP that has visited this site
-	const collection = storage.mongo.collection('IPs');
 
-	const ip = {
-		address: 'req.connection.remoteAddress'
-	};
+// Profile
+exports.profile = function (req, res) {
+	var user = req.user;
+	console.log('user: ', user);
+	res.render('profile', {
+		title: 'Profile',
+		user: user[0]
+	})
+};
 
-	collection.insert(ip, (err) => {
-		if (err) {
-			throw err;
-		}
-		console.log('Data inserted');
-	});
-
-}
-exports.getData = function (req, res) {
-	const collection = storage.mongo.collection('IPs');
-	collection.find({}).toArray(function (err, data) {
-		// data
-	});
-}
 // Movie single
 exports.book_single = function (req, res) {
 	var id = req.params.id;
@@ -90,8 +81,16 @@ exports.book_single = function (req, res) {
 
 };
 
+// Sign in
+exports.sign_in = function (req, res) {
+	res.render('sign_in', {
+		title: 'Sign in'
+	})
+};
+
 // Not Found
 exports.notfound = function (req, res) {
+	var user = req.user;
 	var movies = moviesJSON.movies;
 	var books = [];
 	var collection = storage.mongo.collection('books');
@@ -104,7 +103,8 @@ exports.notfound = function (req, res) {
 			books = data;
 			res.render('notfound', {
 				title: default_tab_title,
-				books: books
+				books: books,
+				user: user
 			});
 		}
 	});
