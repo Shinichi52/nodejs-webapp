@@ -37,6 +37,20 @@
 				<% } %>
 		</div>
 
+		<div id="pagination">
+			<% for (var i=1; i <= pageCount; i++) { %>
+				<% if (i === page) { %>
+					<a href="/page/<%= i %>" class="page-link active-page">
+						<%= i %>
+					</a>
+					<% } else { %>
+						<a href="/page/<%= i %>" class="page-link">
+							<%= i %>
+						</a>
+						<% } %>
+							<% } %>
+		</div>
+
 		<% include partials/footer.ejs %>
 
 			<% include partials/scripts.ejs %>

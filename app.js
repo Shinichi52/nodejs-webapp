@@ -46,6 +46,7 @@ const createServer = () => {
 	// Routes
 	// Home Route
 	app.get('/', routes.home);
+	app.get('/page/:page?', routes.home);
 
 	app.get('/success', passport.authenticate('google'), (req, res) => {
 		routes.home;
@@ -63,6 +64,8 @@ const createServer = () => {
 	app.get('/profile', authCheck, routes.profile);
 
 	app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+	app.get('/favicon.ico', routes.notfound);
 
 	app.get('*', routes.notfound);
 	const PORT = process.env.PORT || 8080;
@@ -84,9 +87,17 @@ try {
 		} else {
 			console.log('connected to database');
 		}
-
-		storage.mongo = db;
-		createServer();
+		var books;
+		db.collection('books').find({}).toArray(function (error, data) {
+			if (err) {
+				console.log('get books err', error);
+			} else {
+				storage.mongo = db;
+				storage.pageCount = Math.ceil(data.length / 6);
+				console.log('length', Math.ceil(data.length / 6));
+				createServer();
+			}
+		})
 	});
 } catch (error) {
 	console.log('error: ', error);

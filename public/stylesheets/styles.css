@@ -514,3 +514,18 @@ Page Not Found Template Styles
   font-size: 1.20em;
   letter-spacing: 0.4px;
 }
+
+#pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.active-page {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.page-link {
+	margin-right: 5px;
+}

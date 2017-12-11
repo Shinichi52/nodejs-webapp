@@ -5,37 +5,39 @@
 			<li>
 				<a href="/">Home</a>
 			</li>
-			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Books
-					<i class="fa fa-chevron-down"></i>
-				</a>
-				<ul class="dropdown-menu">
-					<% for (var i = 0; i < books.length; i++) { %>
-						<li>
-							<a href="/book_id/<%= books[i].id %>" class="episode_link">
-								<%= books[i].name %>
-							</a>
-						</li>
-						<% } %>
-				</ul>
-			</li>
-			<li>
-				<% if (user) { %>
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Account
+			<% if (!exception) { %>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Books
 						<i class="fa fa-chevron-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<li>
-							<a href="/profile" class="episode_link">Account info</a>
-						</li>
-						<li>
-							<a href="/sign_out" class="episode_link">Sign out</a>
-						</li>
+						<% for (var i = 0; i < books.length; i++) { %>
+							<li>
+								<a href="/book_id/<%= books[i].id %>" class="episode_link">
+									<%= books[i].name %>
+								</a>
+							</li>
+							<% } %>
 					</ul>
-					<% } else { %>
-						<a href="/sign_in">Sign in</a>
-						<% } %>
-			</li>
+				</li>
+				<% } %>
+					<li>
+						<% if (user) { %>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Account
+								<i class="fa fa-chevron-down"></i>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="/profile" class="episode_link">Account info</a>
+								</li>
+								<li>
+									<a href="/sign_out" class="episode_link">Sign out</a>
+								</li>
+							</ul>
+							<% } else { %>
+								<a href="/sign_in">Sign in</a>
+								<% } %>
+					</li>
 
 
 		</ul>
