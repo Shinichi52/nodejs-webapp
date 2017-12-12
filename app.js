@@ -49,7 +49,7 @@ const createServer = () => {
 	app.get('/page/:page?', routes.home);
 
 	app.get('/success', passport.authenticate('google'), (req, res) => {
-		routes.home;
+		res.redirect('/');
 	});
 
 	app.get('/book_id/:id?', routes.book_single);

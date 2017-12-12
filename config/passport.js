@@ -12,6 +12,7 @@ var configAuth = require('./auth');
 
 // used to serialize the user for the session
 passport.serializeUser(function (user, done) {
+    console.log('serializeUser', user)
     done(null, user.id);
 });
 
@@ -20,8 +21,8 @@ passport.deserializeUser(function (id, done) {
     const users = storage.mongo.collection('user');
     users.find({ 'id': id }).toArray(function (err, user) {
         if (err) {
-            done(err, {});
         } else {
+            console.log('deserializeUser', user)
             done(null, user);
         }
     });
@@ -45,7 +46,7 @@ passport.use(
                 return done(err);
             } else {
                 if (result.length > 0) {
-                    console.log('login success')
+                    console.log('have been login', result)
                     return done(null, result[0]);
                 } else {
                     console.log('first login')
