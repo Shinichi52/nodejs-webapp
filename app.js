@@ -89,12 +89,14 @@ try {
 		}
 		var books;
 		db.collection('books').find({}).toArray(function (error, data) {
-			if (err) {
+			if (error) {
 				console.log('get books err', error);
 			} else {
+				console.log('data', data);
+				const len = data.length || 0;
 				storage.mongo = db;
-				storage.pageCount = Math.ceil(data.length / 6);
-				console.log('length', Math.ceil(data.length / 6));
+				storage.pageCount = Math.ceil(len / 6);
+				console.log('length', Math.ceil(len / 6));
 				createServer();
 			}
 		})
