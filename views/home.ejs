@@ -24,6 +24,19 @@
 					<a href="/book_id/<%= books[i].id %>">
 						<img src="/images/<%= books[i].poster %>" class="img-responsive cover-image">
 
+						<div class="circle-button-wrapper">
+							<div class="circle-button">
+								<a href="#">
+									<i class="fa fa-plus icon-button"></i>
+								</a>
+							</div>
+							<div class="circle-button">
+								<a href="#">
+									<i class="fa fa-pencil icon-button"></i>
+								</a>
+							</div>
+						</div>
+
 						<div class="poster-info-overlay">
 							<h3>
 								<%= books[i].name %>

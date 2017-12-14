@@ -147,7 +147,12 @@ Home Page Posters Styles
   margin: 0px;	
   margin-top: 15px;
 }
+
 .poster:hover .poster-info-overlay {
+	opacity: 1;
+}
+
+.poster:hover .circle-button {
 	opacity: 1;
 }
 
@@ -528,4 +533,39 @@ Page Not Found Template Styles
 
 .page-link {
 	margin-right: 5px;
+}
+
+.circle-button {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	background-color: rgba(0,0,0,0.7);
+	opacity: 0;
+	transition: 0.5s ease-in-out;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	margin-right: 10px;
+}
+
+.circle-button-wrapper {
+	background-color: transparent;
+	position: absolute;
+	top: 0;
+	right: 0;
+	flex-direction: row;
+	display: flex;
+	padding: 10px;
+	padding-right: 0;
+}
+
+.icon-button {
+	color: white;
+	opacity: 0.9;
+	font-size: 24px !important;
+}
+
+.poster:hover .icon-button{
+    transition: 1s;
+    transform: rotate(360deg);
 }
