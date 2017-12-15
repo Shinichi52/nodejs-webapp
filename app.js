@@ -1,4 +1,6 @@
 var express = require('express');
+var multer = require('multer')
+var bodyParser = require('body-parser')
 const mongodb = require('mongodb');
 var passport = require('passport');
 const passportConfig = require('./config/passport');
@@ -7,6 +9,8 @@ const keys = require('./config/auth');
 const nconf = require('nconf');
 const storage = require('./storage')
 nconf.argv().env().file('keys.json');
+
+var upload = multer({ dest: 'insert_book/' });
 
 const user = nconf.get('mongoUser');
 const pass = nconf.get('mongoPass');
@@ -25,6 +29,12 @@ const authCheck = (req, res, next) => {
 
 const createServer = () => {
 	var app = express();
+
+	// parse application/x-www-form-urlencoded
+	app.use(bodyParser.urlencoded({ extended: false }))
+
+	// parse application/json
+	app.use(bodyParser.json())
 
 	// Viewing engine
 	app.set('view engine', 'ejs');
@@ -62,6 +72,16 @@ const createServer = () => {
 	});
 
 	app.get('/profile', authCheck, routes.profile);
+
+	app.get('/add_book', authCheck, routes.add_book);
+
+	app.post('/insert_book', upload.single('coverFile'), (req, res) => {
+		console.log(req.body.bookName);
+		console.log(req.body.bookId);
+		console.log(req.file.coverFile);
+		res.send('hello');
+	});
+
 
 	app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 

@@ -12,7 +12,6 @@ var configAuth = require('./auth');
 
 // used to serialize the user for the session
 passport.serializeUser(function (user, done) {
-    console.log('serializeUser', user)
     done(null, user.id);
 });
 
@@ -22,7 +21,6 @@ passport.deserializeUser(function (id, done) {
     users.find({ 'id': id }).toArray(function (err, user) {
         if (err) {
         } else {
-            console.log('deserializeUser', user)
             done(null, user);
         }
     });

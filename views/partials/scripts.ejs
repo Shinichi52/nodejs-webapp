@@ -1,6 +1,35 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
 
 <script src="https://use.fontawesome.com/a39e9a18ce.js"></script>
+
+<script>
+    function previewFile(imageId, inputFileId) {
+        var preview = document.getElementById(imageId);
+        var file = document.getElementById(inputFileId).files[0];
+        var reader = new FileReader();
+
+        reader.addEventListener("load", function () {
+            preview.src = reader.result;
+        }, false);
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function insertBook() {
+        var book = {};
+        book.bookId = $("input[name=bookId]").val();
+        book.bookName = $("input[name=bookName]").val();
+        book.bookAuth = $("input[name=bookAuth]").val();
+        book.bookDescription = $("textarea[name=bookDescription]").val();
+        book.bookCover = document.getElementById('cover-image').src;
+        book.bookPoster = document.getElementById('poster-image').src;
+        return books;
+    }
+</script>

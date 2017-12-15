@@ -1,6 +1,7 @@
 var moviesJSON = require('../movies.json')
 var storage = require('../storage');
 var default_tab_title = "Books store"
+var fs = require('fs');
 const PAGE_ELEMENT = 6;
 
 // *************************************************************************************************
@@ -13,20 +14,34 @@ const PAGE_ELEMENT = 6;
 // 
 // *************************************************************************************************
 // Insert data
-exports.insertData = function (req, res) {
-	// Track every IP that has visited this site
-	const collection = storage.mongo.collection('IPs');
+exports.insertData = function (obj) {
+	var cover = obj.bookCover;
+	var poster = obj.bookPoster;
+	fs.readFile(cover, 'binary', function (err, original_data) {
+		// fs.writeFile('image_orig.png', original_data, 'binary', function(err) {});
+		var base64Image = new Buffer(original_data, 'binary').toString('base64');
+		console.log("base64 str:");
+		console.log(base64Image);
+		console.log(base64Image.length);
 
-	const ip = {
-		address: 'req.connection.remoteAddress'
-	};
-
-	collection.insert(ip, (err) => {
-		if (err) {
-			throw err;
-		}
-		console.log('Data inserted');
+		// var decodedImage = new Buffer(base64Image, 'base64').toString('binary');
+		// console.log("decodedImage:");
+		// console.log(decodedImage);
+		// fs.writeFile('image_decoded.png', decodedImage, 'binary', function(err) {});
 	});
+	// Track every IP that has visited this site
+	// const collection = storage.mongo.collection('IPs');
+
+	// const ip = {
+	// 	address: 'req.connection.remoteAddress'
+	// };
+
+	// collection.insert(ip, (err) => {
+	// 	if (err) {
+	// 		throw err;
+	// 	}
+	// 	console.log('Data inserted');
+	// });
 
 }
 
@@ -82,10 +97,20 @@ exports.home = function (req, res) {
 // Profile
 exports.profile = function (req, res) {
 	var user = req.user;
-	console.log('user: ', user);
 	res.render('profile', {
 		title: 'Profile',
-		user: user[0]
+		user: user[0],
+		exception: true
+	})
+};
+
+// Add book
+exports.add_book = function (req, res) {
+	var user = req.user;
+	res.render('add_book', {
+		title: 'Add book',
+		user: user[0],
+		exception: true
 	})
 };
 

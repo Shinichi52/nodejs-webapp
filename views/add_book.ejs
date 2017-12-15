@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <% include partials/head.ejs %>
+
+</head>
+
+<body>
+
+    <% include partials/header.ejs %>
+
+        <div id="hero-image">
+            <h1 id="hero-title">
+                <%= title %>
+            </h1>
+        </div>
+
+        <div id="add-book-wrapper">
+            <form action="/insert_book" enctype="multipart/form-data" method="post">
+                <div id="from-add-book">
+                    <div class="left-form-panel">
+                        <div class="book-property-insert">
+                            <H3>Mã sách:</H3>
+                            <input type="text" class="add-book-input" name="bookId" value="10">
+                        </div>
+                        <div class="book-property-insert">
+                            <H3>Tên sách:</H3>
+                            <input type="text" class="add-book-input" name="bookName" value="Cánh đồng bất tận">
+                        </div>
+                        <div class="book-property-insert">
+                            <H3>Tác giả:</H3>
+                            <input type="text" class="add-book-input" name="bookAuthor" value="Nguyễn Ngọc Tư">
+                        </div>
+                        <div class="book-property-insert book-property-insert-textarea">
+                            <H3>Mô tả:</H3>
+                            <textarea name="bookDescription" id="bookDescription" class="add-book-input" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="right-form-panel">
+                        <div class="image-poster-upload">
+                            <label for="image-poster-input" style="width:100%">
+                                <img id="poster-image" src="" alt="Chọn ảnh bìa" class="img-responsive" />
+                            </label>
+                            <input id="image-poster-input" type="file" name="posterFile" onchange="previewFile('poster-image', 'image-poster-input')"
+                            />
+                        </div>
+                        <div class="image-cover-upload">
+                            <label for="image-cover-input" style="width:100%">
+                                <img id="cover-image" src="" class="img-responsive" alt="Chọn ảnh cover" />
+                            </label>
+                            <input id="image-cover-input" type="file" name="coverFile" onchange="previewFile('cover-image', 'image-cover-input')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="book-insert-submit-button">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+
+
+        <% include partials/footer.ejs %>
+
+            <% include partials/scripts.ejs %>
+</body>
+
+</html>
