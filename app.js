@@ -75,12 +75,7 @@ const createServer = () => {
 
 	app.get('/add_book', authCheck, routes.add_book);
 
-	app.post('/insert_book', upload.single('coverFile'), (req, res) => {
-		console.log(req.body.bookName);
-		console.log(req.body.bookId);
-		console.log(req.file.coverFile);
-		res.send('hello');
-	});
+	app.post('/insert_book', upload.array('bookImages', 2), routes.insertData);
 
 
 	app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -112,9 +107,9 @@ try {
 			if (error) {
 				console.log('get books err', error);
 			} else {
-				console.log('data', data);
 				const len = data.length || 0;
 				storage.mongo = db;
+				storage.len = len;
 				storage.pageCount = Math.ceil(len / 6);
 				console.log('length', Math.ceil(len / 6));
 				createServer();

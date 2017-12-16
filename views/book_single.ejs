@@ -9,7 +9,7 @@
 
   <% include partials/header.ejs %>
 
-    <div id="hero-image-single" style="background-image: url('/images/<%= book.cover %>')">
+    <div id="hero-image-single" style="background-image: url('data:image/jpg;base64,<%= cover %>')">
       <h1 id="hero-title">
         <%= title %>
       </h1>
@@ -17,7 +17,7 @@
 
     <div class="content-padding clearfix">
       <div class="poster-wrapper">
-        <img src="/images/<%= book.poster %>" class="img-responsive">
+        <img src="data:image/png;base64,<%= poster %>" class="img-responsive">
       </div>
       <div class="description-wrapper">
         <div class="description">

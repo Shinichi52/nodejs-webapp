@@ -13,36 +13,46 @@ const PAGE_ELEMENT = 6;
 // 
 // 
 // *************************************************************************************************
+
 // Insert data
-exports.insertData = function (obj) {
-	var cover = obj.bookCover;
-	var poster = obj.bookPoster;
-	fs.readFile(cover, 'binary', function (err, original_data) {
-		// fs.writeFile('image_orig.png', original_data, 'binary', function(err) {});
-		var base64Image = new Buffer(original_data, 'binary').toString('base64');
-		console.log("base64 str:");
-		console.log(base64Image);
-		console.log(base64Image.length);
-
-		// var decodedImage = new Buffer(base64Image, 'base64').toString('binary');
-		// console.log("decodedImage:");
-		// console.log(decodedImage);
-		// fs.writeFile('image_decoded.png', decodedImage, 'binary', function(err) {});
+exports.insertData = function (req, res) {
+	var user = req.user;
+	console.log('files: ', req.files);
+	var posterImage = req.files[0];
+	var coverImage = req.files[1];
+	var newPoster = fs.readFileSync(posterImage.path);
+	var encPoster = newPoster.toString('base64');
+	var poster = Buffer(encPoster, 'base64');
+	var newCover = fs.readFileSync(coverImage.path);
+	var encCover = newCover.toString('base64');
+	var cover = Buffer(encCover, 'base64');
+	var newBook = {
+		id: req.body.bookId,
+		name: req.body.bookName,
+		author: req.body.bookAuthor,
+		description: req.body.bookDescription,
+		poster: poster,
+		cover: cover
+	};
+	const collection = storage.mongo.collection('books');
+	collection.insert(newBook, function (err, result) {
+		if (err) {
+			console.log('Cannot insert book ', err);
+		};
+		console.log('inserted', newBook.id);
+		storage.len += 1;
+		storage.pageCount = Math.ceil(storage.len / 6);
+		res.render('book_single', {
+			title: newBook.name,
+			books: [],
+			book: newBook,
+			author: newBook.author,
+			poster: poster.toString('base64'),
+			cover: cover.toString('base64'),
+			user: user,
+			exception: false
+		})
 	});
-	// Track every IP that has visited this site
-	// const collection = storage.mongo.collection('IPs');
-
-	// const ip = {
-	// 	address: 'req.connection.remoteAddress'
-	// };
-
-	// collection.insert(ip, (err) => {
-	// 	if (err) {
-	// 		throw err;
-	// 	}
-	// 	console.log('Data inserted');
-	// });
-
 }
 
 // Get data
@@ -80,7 +90,7 @@ exports.home = function (req, res) {
 					user: user,
 					page: page,
 					pageCount: pageCount,
-					exception: false
+					exception: true
 				})
 			}
 		});
@@ -122,22 +132,27 @@ exports.book_single = function (req, res) {
 	var movies = moviesJSON.movies;
 	var books = [];
 	var collection = storage.mongo.collection('books');
+	var maxLen = storage.len;
 	// Find some documents
 	collection.find({}).toArray(function (err, data) {
 		if (err) {
 			console.log("Cannot get data");
 		} else {
 			books = data;
-			if (id >= 1 && id <= 9) {
+			if (id >= 1 && id <= maxLen) {
 				var book = books[id - 1];
 				var name = book.name;
 				var author = book.author;
+				var poster = book.poster;
+				var cover = book.cover;
 
 				res.render('book_single', {
 					title: name,
 					books: books,
 					book: book,
 					author: author,
+					poster: poster.toString('base64'),
+					cover: cover.toString('base64'),
 					user: user,
 					exception: false
 				})
