@@ -103,6 +103,8 @@ try {
 			console.log('connected to database');
 		}
 		var books;
+		storage.pageCount = 0;
+		storage.len = 0;
 		db.collection('books').find({}).toArray(function (error, data) {
 			if (error) {
 				console.log('get books err', error);
