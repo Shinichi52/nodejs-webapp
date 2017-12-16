@@ -40,7 +40,7 @@ exports.insertData = function (req, res) {
 			console.log('Cannot insert book ', err);
 		};
 		console.log('inserted', newBook.id);
-		storage.len += 1;
+		storage.len = storage.len + 1;
 		storage.pageCount = Math.ceil(storage.len / 6);
 		res.render('book_single', {
 			title: newBook.name,
