@@ -1,4 +1,5 @@
 module.exports = {
     mongo: null,
-    pageCount: null
+    pageCount: 0,
+    len: 0
 }
