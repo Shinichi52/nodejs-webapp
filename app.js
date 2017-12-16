@@ -103,11 +103,11 @@ try {
 			console.log('connected to database');
 		}
 		var books;
-		storage.pageCount = 0;
-		storage.len = 0;
 		db.collection('books').find({}).toArray(function (error, data) {
 			if (error) {
 				console.log('get books err', error);
+				storage.pageCount = 0;
+				storage.len = 0;
 			} else {
 				const len = data.length || 0;
 				storage.mongo = db;
@@ -120,5 +120,7 @@ try {
 	});
 } catch (error) {
 	console.log('error: ', error);
+	storage.pageCount = 0;
+	storage.len = 0;
 	createServer();
 }
