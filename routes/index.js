@@ -20,14 +20,14 @@ exports.insertData = function (req, res) {
 	console.log('files: ', req.files);
 	var posterImage = req.files[0];
 	var coverImage = req.files[1];
-	var newPoster = fs.readFileSync(posterImage.path);
+	var newPoster = posterImage && posterImage.path ? fs.readFileSync(posterImage.path) : '';
 	var encPoster = newPoster.toString('base64');
 	var poster = Buffer(encPoster, 'base64');
-	var newCover = fs.readFileSync(coverImage.path);
+	var newCover = coverImage && coverImage.path ? fs.readFileSync(coverImage.path) : '';
 	var encCover = newCover.toString('base64');
 	var cover = Buffer(encCover, 'base64');
 	var newBook = {
-		id: req.body.bookId,
+		id: storage.len + 1,
 		name: req.body.bookName,
 		author: req.body.bookAuthor,
 		description: req.body.bookDescription,
