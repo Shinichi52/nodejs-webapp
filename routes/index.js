@@ -72,7 +72,7 @@ exports.home = function (req, res) {
 					books: books,
 					user: user,
 					page: page,
-					pageCount: pageCount
+					pageCount: parseInt(pageCount)
 				})
 			}
 		});
@@ -105,7 +105,7 @@ exports.add_book = function (req, res) {
 // Book single
 exports.book_single = function (req, res) {
 	var user = req.user;
-	var id = req.params.id;
+	var id = parseInt(req.params.id);
 	var collection = storage.mongo.collection('books');
 	var maxLen = storage.len;
 	console.log('maxLen', maxLen)
