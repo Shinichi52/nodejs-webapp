@@ -3,44 +3,28 @@
 	<div class="content-padding">
 		<ul class="nav navbar-nav navbar-right">
 			<li>
-				<a href="/">Home</a>
+				<a href="/page/1">Home</a>
 			</li>
-			<% if (!exception) { %>
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Books
+			<li>
+				<% if (user) { %>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Account
 						<i class="fa fa-chevron-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<% for (var i = 0; i < books.length; i++) { %>
-							<li>
-								<a href="/book_id/<%= books[i].id %>" class="episode_link">
-									<%= books[i].name %>
-								</a>
-							</li>
-							<% } %>
+						<li>
+							<a href="/add_book" class="episode_link">Add book</a>
+						</li>
+						<li>
+							<a href="/profile" class="episode_link">Account info</a>
+						</li>
+						<li>
+							<a href="/sign_out" class="episode_link">Sign out</a>
+						</li>
 					</ul>
-				</li>
-				<% } %>
-					<li>
-						<% if (user) { %>
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Account
-								<i class="fa fa-chevron-down"></i>
-							</a>
-							<ul class="dropdown-menu">
-								<li>
-									<a href="/add_book" class="episode_link">Add book</a>
-								</li>
-								<li>
-									<a href="/profile" class="episode_link">Account info</a>
-								</li>
-								<li>
-									<a href="/sign_out" class="episode_link">Sign out</a>
-								</li>
-							</ul>
-							<% } else { %>
-								<a href="/sign_in">Sign in</a>
-								<% } %>
-					</li>
+					<% } else { %>
+						<a href="/sign_in">Sign in</a>
+						<% } %>
+			</li>
 
 
 		</ul>

@@ -44,7 +44,7 @@ passport.use(
                 return done(err);
             } else {
                 if (result.length > 0) {
-                    console.log('have been login', result)
+                    console.log('have been login')
                     return done(null, result[0]);
                 } else {
                     console.log('first login')

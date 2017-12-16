@@ -17,7 +17,6 @@ const PAGE_ELEMENT = 6;
 // Insert data
 exports.insertData = function (req, res) {
 	var user = req.user;
-	console.log('files: ', req.files);
 	var posterImage = req.files[0];
 	var coverImage = req.files[1];
 	var newPoster = posterImage && posterImage.path ? fs.readFileSync(posterImage.path) : '';
@@ -26,6 +25,7 @@ exports.insertData = function (req, res) {
 	var newCover = coverImage && coverImage.path ? fs.readFileSync(coverImage.path) : '';
 	var encCover = newCover.toString('base64');
 	var cover = Buffer(encCover, 'base64');
+	console.log('storage.len', storage.len)
 	var newBook = {
 		id: storage.len + 1,
 		name: req.body.bookName,
@@ -44,26 +44,12 @@ exports.insertData = function (req, res) {
 		storage.pageCount = Math.ceil(storage.len / 6);
 		res.render('book_single', {
 			title: newBook.name,
-			books: [],
 			book: newBook,
 			author: newBook.author,
 			poster: poster.toString('base64'),
 			cover: cover.toString('base64'),
-			user: user,
-			exception: false
+			user: user
 		})
-	});
-}
-
-// Get data
-exports.getData = function (table) {
-	const collection = storage.mongo.collection(table);
-	collection.find({}).toArray(function (err, data) {
-		if (err) {
-			console.log('get data err from ', table);
-		} else {
-			return data;
-		}
 	});
 }
 
@@ -72,34 +58,28 @@ exports.home = function (req, res) {
 	const pageCount = storage.pageCount;
 	var user = req.user;
 	var page = parseInt(req.params.page) || 1;
-	console.log('page: ', page);
-	var books = [];
 	if (page > 0 && page <= pageCount) {
 		const skip = (page - 1) * PAGE_ELEMENT;
 		const count = PAGE_ELEMENT;
 		var collection = storage.mongo.collection('books');
-		// Find some documents
 		collection.find({}).limit(count).skip(skip).toArray(function (err, data) {
 			if (err) {
 				console.log("Cannot get data");
 			} else {
-				books = data;
+				var books = data;
 				res.render('home', {
 					title: default_tab_title,
 					books: books,
 					user: user,
 					page: page,
-					pageCount: pageCount,
-					exception: true
+					pageCount: pageCount
 				})
 			}
 		});
 	} else {
 		res.render('notfound', {
 			title: default_tab_title,
-			books: books,
-			user: user,
-			exception: true
+			user: user
 		});
 	}
 };
@@ -109,8 +89,7 @@ exports.profile = function (req, res) {
 	var user = req.user;
 	res.render('profile', {
 		title: 'Profile',
-		user: user[0],
-		exception: true
+		user: user[0]
 	})
 };
 
@@ -119,49 +98,39 @@ exports.add_book = function (req, res) {
 	var user = req.user;
 	res.render('add_book', {
 		title: 'Add book',
-		user: user[0],
-		exception: true
+		user: user[0]
 	})
 };
 
-// Movie single
+// Book single
 exports.book_single = function (req, res) {
 	var user = req.user;
 	var id = req.params.id;
-	console.log('id:  ', id);
-	var movies = moviesJSON.movies;
-	var books = [];
 	var collection = storage.mongo.collection('books');
 	var maxLen = storage.len;
-	// Find some documents
-	collection.find({}).toArray(function (err, data) {
+	console.log('maxLen', maxLen)
+	collection.find({ id: id }).toArray(function (err, data) {
 		if (err) {
 			console.log("Cannot get data");
 		} else {
-			books = data;
-			if (id >= 1 && id <= maxLen) {
-				var book = books[id - 1];
+			if (data.length > 0) {
+				var book = data[0];
 				var name = book.name;
 				var author = book.author;
 				var poster = book.poster;
 				var cover = book.cover;
-
 				res.render('book_single', {
 					title: name,
-					books: books,
 					book: book,
 					author: author,
 					poster: poster.toString('base64'),
 					cover: cover.toString('base64'),
-					user: user,
-					exception: false
+					user: user
 				})
 			} else {
 				res.render('notfound', {
 					title: default_tab_title,
-					books: books,
-					user: user,
-					exception: true
+					user: user
 				});
 			}
 		}
@@ -179,21 +148,8 @@ exports.sign_in = function (req, res) {
 // Not Found
 exports.notfound = function (req, res) {
 	var user = req.user;
-	var movies = moviesJSON.movies;
-	var books = [];
-	var collection = storage.mongo.collection('books');
-	// Find some documents
-	collection.find({}).toArray(function (err, data) {
-		if (err) {
-			console.log("Cannot get data");
-		} else {
-			books = data;
-			res.render('notfound', {
-				title: default_tab_title,
-				books: books,
-				user: user,
-				exception: true
-			});
-		}
+	res.render('notfound', {
+		title: default_tab_title,
+		user: user
 	});
 };
