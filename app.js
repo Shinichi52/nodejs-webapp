@@ -77,6 +77,8 @@ const createServer = () => {
 
 	app.get('/edit_book/:id?', authCheck, routes.edit_book);
 
+	app.get('/delete_book/:id?', authCheck, routes.delete_book);
+
 	app.post('/insert_book', upload.array('bookImages', 2), routes.insertBook);
 
 	app.post('/update_book/:id?', upload.array('bookImages', 2), routes.updateBook);

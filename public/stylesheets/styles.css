@@ -536,9 +536,9 @@ Page Not Found Template Styles
 }
 
 .circle-button {
-	width: 50px;
-	height: 50px;
-	border-radius: 25px;
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
 	background-color: rgba(0,0,0,0.7);
 	opacity: 0;
 	transition: 0.5s ease-in-out;
@@ -562,7 +562,7 @@ Page Not Found Template Styles
 .icon-button {
 	color: white;
 	opacity: 0.9;
-	font-size: 24px !important;
+	font-size: 16px !important;
 }
 
 .poster:hover .icon-button{

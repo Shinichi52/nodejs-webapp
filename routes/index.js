@@ -25,9 +25,9 @@ exports.insertBook = function (req, res) {
 	var newCover = coverImage && coverImage.path ? fs.readFileSync(coverImage.path) : '';
 	var encCover = newCover.toString('base64');
 	var cover = Buffer(encCover, 'base64');
-	console.log('storage.len', storage.len)
+	var id = new Date().getTime();
 	var newBook = {
-		id: storage.len + 1,
+		id: id,
 		name: req.body.bookName,
 		author: req.body.bookAuthor,
 		description: req.body.bookDescription,
@@ -128,6 +128,21 @@ exports.updateBook = function (req, res) {
 			})
 		});
 	}
+}
+
+exports.delete_book = function (req, res) {
+	var user = req.user;
+	var id = parseInt(req.params.id);
+	var collection = storage.mongo.collection('books');
+	collection.remove({ id: id }, function (err, suscess) {
+		if (err) {
+			console.log("Cannot delete book", id);
+		} else {
+			storage.len = storage.len - 1;
+			storage.pageCount = Math.ceil(storage.len / 6);
+			res.redirect('/');
+		}
+	});
 }
 
 // Home page
