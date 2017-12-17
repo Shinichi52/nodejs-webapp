@@ -662,3 +662,7 @@ Page Not Found Template Styles
 	margin-left: 5%;
 	cursor: pointer;
 }
+
+#hidden-div-update {
+	display: none;
+}

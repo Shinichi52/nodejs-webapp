@@ -1,0 +1,58 @@
+<div id="add-book-wrapper">
+    <form action="<%= editMode ? '/update_book/' + book.id : '/insert_book' %>" enctype="multipart/form-data" method="post">
+        <div id="from-add-book">
+            <% if (editMode) { %>
+                <div id="hidden-div-update">
+                    <input type="text" name="curBookId" value="<%= book.id %>">
+                    <input type="text" name="curBookName" value="<%= book.name %>">
+                    <input type="text" name="curBookAuthor" value="<%= book.author %>">
+                    <input type="text" name="curBookDescription" value="<%= book.description %>">
+                    <input type="text" name="curPoster" value="<%= book.poster.toString('base64') %>">
+                    <input type="text" name="curCover" value="<%= book.cover.toString('base64') %>">
+                </div>
+                <% } %>
+                    <div class="left-form-panel">
+                        <div class="book-property-insert">
+                            <H3>Tên sách:</H3>
+                            <input id="book-name-input" type="text" class="add-book-input" name="bookName" value="<%= editMode ? book.name : '' %>" autofocus>
+                        </div>
+                        <div class="book-property-insert">
+                            <H3>Tác giả:</H3>
+                            <input type="text" class="add-book-input" name="bookAuthor" value="<%= editMode ? book.author : '' %>">
+                        </div>
+                        <div class="book-property-insert book-property-insert-textarea">
+                            <H3>Mô tả:</H3>
+                            <textarea name="bookDescription" id="bookDescription" class="add-book-input" rows="5"><%= editMode ? book.description : '' %></textarea>
+                        </div>
+                    </div>
+                    <div class="right-form-panel">
+                        <div class="image-poster-upload">
+                            <label for="image-poster-input" style="width:100%">
+                                <% if (!editMode) { %>
+                                    <img id="poster-image" src="" alt="Chọn ảnh bìa" class="img-responsive" />
+                                    <% } else { %>
+                                        <img id="poster-image" src="data:image/png;base64,<%= book.poster.toString('base64') %>" alt="Chọn ảnh bìa" class="img-responsive"
+                                        />
+                                        <% } %>
+                            </label>
+                            <input id="image-poster-input" type="file" name="bookImages" onchange="previewFile('poster-image', 'image-poster-input')"
+                            />
+                        </div>
+                        <div class="image-cover-upload">
+                            <label for="image-cover-input" style="width:100%">
+                                <% if (!editMode) { %>
+                                    <img id="cover-image" src="" class="img-responsive" alt="Chọn ảnh cover" />
+                                    <% } else { %>
+                                        <img id="cover-image" src="data:image/jpg;base64,<%= book.cover.toString('base64') %>" alt="Chọn ảnh cover" class="img-responsive"
+                                        />
+                                        <% } %>
+                            </label>
+                            <input id="image-cover-input" type="file" name="bookImages" onchange="previewFile('cover-image', 'image-cover-input')" />
+                        </div>
+                    </div>
+        </div>
+        <div class="book-insert-submit-button">
+            <input type="submit" value="<%= editMode ? 'Update' : 'Create' %>">
+        </div>
+    </form>
+</div>

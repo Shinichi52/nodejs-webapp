@@ -1,7 +1,7 @@
-var moviesJSON = require('../movies.json')
 var storage = require('../storage');
 var default_tab_title = "Books store"
 var fs = require('fs');
+var dialog = require('dialog');
 const PAGE_ELEMENT = 6;
 
 // *************************************************************************************************
@@ -15,7 +15,7 @@ const PAGE_ELEMENT = 6;
 // *************************************************************************************************
 
 // Insert data
-exports.insertData = function (req, res) {
+exports.insertBook = function (req, res) {
 	var user = req.user;
 	var posterImage = req.files[0];
 	var coverImage = req.files[1];
@@ -51,6 +51,83 @@ exports.insertData = function (req, res) {
 			user: user
 		})
 	});
+}
+
+function compare2Document(doc1, doc2) { // doc1 = new, doc2 = cur
+	if (doc1.name === doc2.name
+		&& doc1.author === doc2.author && doc1.description === doc2.description
+		&& (!doc1.poster || doc1.poster.toString('base64') === doc2.poster)
+		&& (!doc1.cover || doc1.cover.toString('base64') === doc2.cove)) {
+		return true;
+	}
+	return false;
+}
+
+exports.updateBook = function (req, res) {
+	var user = req.user;
+	var id = parseInt(req.params.id);
+	var poster = null;
+	var cover = null;
+	var posterImage = req.files[0];
+	if (posterImage) {
+		var newPoster = posterImage && posterImage.path ? fs.readFileSync(posterImage.path) : '';
+		var encPoster = newPoster.toString('base64');
+		poster = Buffer(encPoster, 'base64');
+	}
+	var coverImage = req.files[1];
+	if (coverImage) {
+		var newCover = coverImage && coverImage.path ? fs.readFileSync(coverImage.path) : '';
+		var encCover = newCover.toString('base64');
+		cover = Buffer(encCover, 'base64');
+	}
+	var newBook = {
+		id: id,
+		name: req.body.bookName,
+		author: req.body.bookAuthor,
+		description: req.body.bookDescription,
+		poster: poster,
+		cover: cover
+	};
+	var curBook = {
+		id: id,
+		name: req.body.curBookName,
+		author: req.body.curBookAuthor,
+		description: req.body.curBookDescription,
+		poster: req.body.curPoster,
+		cover: req.body.curCover
+	}
+	var check = compare2Document(newBook, curBook);
+	if (check) {
+		dialog.info('Nothing change!', 'Notification', () => {
+			res.redirect('/edit_book/' + id);
+		});
+	} else {
+		if (!poster) poster = Buffer(req.body.curPoster, 'base64');
+		if (!cover) cover = Buffer(req.body.curCover, 'base64');
+		var newBook2 = {
+			id: id,
+			name: req.body.bookName,
+			author: req.body.bookAuthor,
+			description: req.body.bookDescription,
+			poster: poster,
+			cover: cover
+		}
+		const collection = storage.mongo.collection('books');
+		collection.update({ id: id }, newBook2, function (err, result) {
+			if (err) {
+				console.log('Cannot update book ', err);
+			};
+			console.log('updated', newBook.id);
+			res.render('book_single', {
+				title: newBook.name,
+				book: newBook,
+				author: newBook.author,
+				poster: poster.toString('base64'),
+				cover: cover.toString('base64'),
+				user: user
+			})
+		});
+	}
 }
 
 // Home page
@@ -98,8 +175,36 @@ exports.add_book = function (req, res) {
 	var user = req.user;
 	res.render('add_book', {
 		title: 'Add book',
-		user: user[0]
+		user: user[0],
+		editMode: false
 	})
+};
+
+// Edit book
+exports.edit_book = function (req, res) {
+	var user = req.user;
+	var id = parseInt(req.params.id);
+	var collection = storage.mongo.collection('books');
+	collection.find({ id: id }).toArray(function (err, data) {
+		if (err) {
+			console.log("Cannot get data");
+		} else {
+			if (data.length > 0) {
+				var book = data[0];
+				res.render('edit_book', {
+					title: 'Edit book',
+					user: user[0],
+					book: book,
+					editMode: true
+				})
+			} else {
+				res.render('notfound', {
+					title: default_tab_title,
+					user: user
+				});
+			}
+		}
+	});
 };
 
 // Book single

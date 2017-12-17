@@ -22,6 +22,14 @@
         }
     }
 
+    $(document).ready(function () {
+        var input = $("#book-name-input");
+        var len = input.val().length;
+        input[0].focus();
+        input[0].setSelectionRange(len, len);
+
+    });
+
     function insertBook() {
         var book = {};
         book.bookId = $("input[name=bookId]").val();

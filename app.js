@@ -75,7 +75,11 @@ const createServer = () => {
 
 	app.get('/add_book', authCheck, routes.add_book);
 
-	app.post('/insert_book', upload.array('bookImages', 2), routes.insertData);
+	app.get('/edit_book/:id?', authCheck, routes.edit_book);
+
+	app.post('/insert_book', upload.array('bookImages', 2), routes.insertBook);
+
+	app.post('/update_book/:id?', upload.array('bookImages', 2), routes.updateBook);
 
 
 	app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
