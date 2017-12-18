@@ -100,9 +100,7 @@ exports.updateBook = function (req, res) {
 	}
 	var check = compare2Document(newBook, curBook);
 	if (check) {
-		dialog.info('Nothing change!', 'Notification', () => {
-			res.redirect('/edit_book/' + id);
-		});
+		res.send('Nothing change!');
 	} else {
 		if (!poster) poster = Buffer(req.body.curPoster, 'base64');
 		if (!cover) cover = Buffer(req.body.curCover, 'base64');
