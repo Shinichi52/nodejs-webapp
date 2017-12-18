@@ -666,3 +666,8 @@ Page Not Found Template Styles
 #hidden-div-update {
 	display: none;
 }
+
+.send-mail-form {
+	width: 50%;
+	margin: auto;
+}

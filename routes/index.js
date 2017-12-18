@@ -1,6 +1,8 @@
 var storage = require('../storage');
 var default_tab_title = "Books store"
 var fs = require('fs');
+const nodemailer = require('nodemailer');
+const xoauth2 = require('xoauth2');
 var dialog = require('dialog');
 const PAGE_ELEMENT = 6;
 
@@ -257,6 +259,37 @@ exports.book_single = function (req, res) {
 	});
 
 };
+
+// Send mail
+exports.send_mail = function (req, res) {
+	var user = req.user;
+	res.render('send_mail', {
+		title: 'Send mail',
+		user: user[0]
+	})
+};
+
+exports.sendEmail = function (req, res) {
+	var user = req.user;
+	console.log('receiver: ', req.body.receiver);
+	console.log('subject: ', req.body.subject);
+	console.log('content: ', req.body.content);
+	var mailOptions = {
+		from: user[0].name + '<' + user[0].email + '>',
+		to: req.body.receiver,
+		subject: req.body.subject,
+		text: req.body.content
+	}
+	var transporter = storage.transporter;
+	transporter.sendMail(mailOptions, function (err, success) {
+		if (err) {
+			res.send('send mail ' + err);
+		} else {
+			console.log('Email Sent');
+			res.redirect('/');
+		}
+	})
+}
 
 // Sign in
 exports.sign_in = function (req, res) {

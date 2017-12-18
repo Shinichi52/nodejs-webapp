@@ -1,5 +1,8 @@
 // load all the things we need
+var storage = require('../storage');
 var passport = require('passport');
+const nodemailer = require('nodemailer');
+const xoauth2 = require('xoauth2');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // load data
@@ -37,6 +40,19 @@ passport.use(
         callbackURL: configAuth.googleAuth.callbackURL,
     }, (accessToken, refreshToken, profile, done) => {
         console.log('passport callback function fired');
+        console.log('refreshToken', refreshToken);
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                xoauth2: xoauth2.createXOAuth2Generator({
+                    user: profile.emails[0].value,
+                    clientId: configAuth.googleAuth.clientID,
+                    clientSecret: configAuth.googleAuth.clientSecret,
+                    refreshToken: refreshToken
+                })
+            }
+        })
+        storage.transporter = transporter;
         const users = storage.mongo.collection('user');
         users.find({ 'id': profile.id }).toArray(function (err, result) {
             if (err) {

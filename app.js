@@ -1,4 +1,6 @@
 var express = require('express');
+const nodemailer = require('nodemailer');
+const xoauth2 = require('xoauth2');
 var multer = require('multer')
 var bodyParser = require('body-parser')
 const mongodb = require('mongodb');
@@ -71,6 +73,10 @@ const createServer = () => {
 		res.redirect('/');
 	});
 
+	app.get('/send_mail', authCheck, routes.send_mail);
+
+	app.post('/send_mail_res', routes.sendEmail);
+
 	app.get('/profile', authCheck, routes.profile);
 
 	app.get('/add_book', authCheck, routes.add_book);
@@ -84,7 +90,18 @@ const createServer = () => {
 	app.post('/update_book/:id?', upload.array('bookImages', 2), routes.updateBook);
 
 
-	app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+	app.get('/auth/google', passport.authenticate('google', {
+		scope: [
+			'https://www.googleapis.com/auth/userinfo.profile',
+			'https://www.googleapis.com/auth/userinfo.email',
+			'https://mail.google.com/',
+			'https://www.googleapis.com/auth/gmail.modify',
+			'https://www.googleapis.com/auth/gmail.compose',
+			'https://www.googleapis.com/auth/gmail.send'
+		],
+		accessType: 'offline',
+		prompt: 'consent'
+	}));
 
 	app.get('/favicon.ico', routes.notfound);
 

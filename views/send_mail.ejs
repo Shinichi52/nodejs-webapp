@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <% include partials/head.ejs %>
+
+</head>
+
+<body>
+
+    <% include partials/header.ejs %>
+
+        <div id="hero-image">
+            <h1 id="hero-title">
+                <%= title %>
+            </h1>
+        </div>
+
+        <form action="/send_mail_res" method="post" class="send-mail-form">
+            <div class="book-property-insert">
+                <H3>From:</H3>
+                <input type="text" class="add-book-input" name="sender" value="<%= user.email %>" readonly>
+            </div>
+            <div class="book-property-insert">
+                <H3>To:</H3>
+                <input type="text" class="add-book-input" name="receiver" value="" autofocus>
+            </div>
+            <div class="book-property-insert">
+                <H3>Subject:</H3>
+                <input type="text" class="add-book-input" name="subject" value="">
+            </div>
+            <div class="book-property-insert book-property-insert-textarea">
+                <H3>Content:</H3>
+                <textarea name="content" id="bookDescription" class="add-book-input" rows="5"></textarea>
+            </div>
+            <div class="book-insert-submit-button" style="margin-top: 80px">
+                <input type="submit" value="send">
+            </div>
+        </form>
+
+        <% include partials/footer.ejs %>
+
+            <% include partials/scripts.ejs %>
+</body>
+
+</html>
