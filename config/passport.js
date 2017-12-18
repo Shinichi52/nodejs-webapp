@@ -44,12 +44,13 @@ passport.use(
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                xoauth2: xoauth2.createXOAuth2Generator({
-                    user: profile.emails[0].value,
-                    clientId: configAuth.googleAuth.clientID,
-                    clientSecret: configAuth.googleAuth.clientSecret,
-                    refreshToken: refreshToken
-                })
+                type: 'OAuth2',
+                user: profile.emails[0].value,
+                clientId: configAuth.googleAuth.clientID,
+                clientSecret: configAuth.googleAuth.clientSecret,
+                refreshToken: refreshToken
+                // user: 'windylovely93tb@gmail.com',
+                // pass: 'thuyduong279'
             }
         })
         storage.transporter = transporter;
